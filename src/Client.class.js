@@ -4,7 +4,8 @@ import { DockerClient } from "https://raw.githubusercontent.com/Oursin/denocker/
 export class Client {
   constructor(options = {}) {
     return (async function () {
-      this.path = options.path ? options.path : "/run/podman/podman.sock";
+      this.systemPath = Deno.env.get("XDG_RUNTIME_DIR") ? Deno.env.get("XDG_RUNTIME_DIR") : "/run";
+      this.path = options.path ? options.path : this.systemPath + "/podman/podman.sock";
       this.version = options.version ? options.version : "4.0.0";
       this.url = options.url ? options.url : "http://d/v" + this.version + "/libpod/";
       this.connection = await Deno.connect({path: this.path, transport: "unix"});
